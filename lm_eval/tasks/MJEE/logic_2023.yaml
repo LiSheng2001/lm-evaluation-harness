@@ -1,0 +1,27 @@
+task: MJEE_logic_2023
+dataset_path: TomLi/MJEE
+dataset_name: null
+validation_split: validation
+output_type: generate_until
+process_docs: !function utils.process_docs
+doc_to_text: "阅读并作答以下逻辑题目，注意最终答案必须新起一行并以`#### 答案: [正确选项]`，如`#### 答案: A`。下面是题目。\n{{Question.strip()}}\n"
+doc_to_target: "{{Answer}}"
+generation_kwargs:
+  until:
+    - "</s>"
+    - "<|im_end|>"
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 16000
+filter_list:
+  - name: "score-first"
+    filter:
+      - function: "regex"
+        regex_pattern: "#### 答案: ([ABCDE])"
+      - function: "take_first"
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
