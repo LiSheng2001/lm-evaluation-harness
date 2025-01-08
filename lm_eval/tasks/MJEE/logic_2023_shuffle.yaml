@@ -1,0 +1,3 @@
+include: logic_2023.yaml
+task: MJEE_logic_2023_shuffle
+process_docs: !function utils.process_docs_shuffle
